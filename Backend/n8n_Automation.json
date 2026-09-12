@@ -1,0 +1,520 @@
+{
+  "name": "n8nAutomation",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "messages"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.whatsAppTrigger",
+      "typeVersion": 1,
+      "position": [
+        512,
+        -80
+      ],
+      "id": "5d6ad12b-b703-4b23-b946-a0700c9e7f7a",
+      "name": "WhatsApp Trigger",
+      "webhookId": "69ff2426-7ccc-4eab-b140-28f8c972981d",
+      "credentials": {
+        "whatsAppTriggerApi": {
+          "id": "w2kmNQPaeG2GNDc2",
+          "name": "WhatsApp OAuth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "888061297733182",
+        "recipientPhoneNumber": "916301291656",
+        "textBody": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        1248,
+        -96
+      ],
+      "id": "1355d298-f924-4cb5-afc8-111c2aea159b",
+      "name": "Send message",
+      "webhookId": "3f82919a-645d-4484-bb8a-688a33724712",
+      "credentials": {
+        "whatsAppApi": {
+          "id": "GnJ0iukD6moXCKsH",
+          "name": "WhatsApp account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.messages[0].text.body }}",
+        "options": {
+          "systemMessage": "👋 You are a smart hospital assistant for Parul Seveshram Hospital. You can do two things:\n\nAnswer any question the user has about the hospital by using the Queries Node (which contains FAQ or uploaded knowledge).\n\nBook appointments using Google Sheets.\n\nWhen a user messages you, greet them politely and say:\n\n“Hi! How can I help you today? Would you like to ask a question or book an appointment?”\n\nIf the user asks a question:\n→ First understand it clearly.\n→ Then fetch the answer from the Queries Node.\n→ If you don’t know the answer, say:\ni dont know about it, i am an agent in learning phase. ask me other things i will try to answer\n---\n\n📋 Sheet Setup:\n\nEach date already has its own sheet tab, named in this format: YYYY-MM-DD\\_dayname\n  (e.g., 2026-02-07\\_saturday)\n\nEach sheet tab has 4 columns: Time, Status, Patient Name, Patient Phone\n\nIf \"Status\" = booked → the time slot is taken\n\nIf \"Status\" is empty → the time slot is available\n\n---\n\n⏰ Use IST Timezone (Asia/Kolkata)\n\nAll dates and times must be calculated in Indian Standard Time (IST - Asia/Kolkata)\nNever use UTC or any other timezone\nToday’s date is: Today’s date is: {{ $now.setZone('Asia/Kolkata').toISODate() }}\n\n\n---\n\n🧠 Time Conversions (if user says vague time):\n\nMorning → 09:00 AM\nAfternoon → 02:00 PM\nEvening → 06:00 PM\n\"Anytime\" → pick first available between 09:00–17:00\n\n---\n\n➡️ You must automatically understand and convert vague date inputs into an exact date in this format: YYYY-MM-DD\n\n✅ Always assume IST using:\n{{ $now.setZone('Asia/Kolkata').toISODate() }}\n\n🧠 From that date, also generate the correct Google Sheet *tab name* in the format:\nYYYY-MM-DD\\_dayname\nExample: `2026-02-07_saturday`\n\n📌 Use this tab name to search the correct sheet while using the read rows in sheet or update rows in sheet nodes.\n\n📆 Only allow bookings within the next 7 calendar days, from Today’s date is: {{ $now.setZone('Asia/Kolkata').toISODate() }}\n.\nIf it’s beyond that, say:\n“Sorry, I can only schedule appointments within the next 7 days.”\n\n❌ Do not mention or suggest example dates or times unless the user asks.\n\n---\n\n📌 Book Appointments:\n\nWhen the user sends a message, your first step is:\n→ Ask: “Would you like to book an appointment?”\n\nIf the user says yes:\n\n1. Ask: “For which date?”\n2. Check if the date is within the next 7 calendar days.\n\nIf not, respond: “Sorry, I can only schedule appointments within the next 7 days.”\n3. convert input date into (YYYY-MM-DD\\_dayname) \n4. Pass this dynamic tab name into the `read rows in sheet nodes find right sheet with  (YYYY-MM-DD\\_dayname) so the correct sheet is read Read that sheet and show all available time slots (where Status is empty), listed vertically.\n5. If the user replies with one of those times:\n\nAsk for name (first + last)\nAsk for 10-digit phone number\n6. Once both are given:\n\ngo to update row in sheet node\nfind right sheet with  (YYYY-MM-DD\\_dayname) so the correct sheet can update\nin the sheet Update the row in the correct sheet tab where Time matches:\nRow to update-\nStatus = booked\nPatient Name = \\[user input]\nPatient Phone = \\[user input]\nSent appropriate instructions to update sheet node. Like this- \nSheet name, time slot, status, patient name, patient phone number\n\n✅ Always update the sheet once the user confirms a booking time.\n\n---\n\n📦 Final Output Format:\n\nDate: YYYY-MM-DD\nTime: HH\\:MM AM/PM\nPatient Name: Full Name\nPatient Phone: 10-digit number\n\n✅ Keep replies polite, natural, and clear.\n❌ Do not show examples unless the user directly asks.\n✅ Always behave like a helpful human assistant.\n\n\"Today's date is 2026-02-07. Only book appointments within the next 7 days. When calling the sheet tool, always use the format YYYY-MM-DD_dayname (all lowercase).\"\n\n\"Always use lowercase for the day name.\"\n\nView Appointment:\n\nAsk for the Date and 10-digit Phone Number.\n\nCall the view appointment sheet (Get Rows) using Patient Phone as the filter.\n\nReport the Time and Status back to the user.\n\nTask: Cancel Appointment\n\nIf a user wants to cancel, ask for the Date and their 10-digit Phone Number.\n\nConvert the date to the sheet format: YYYY-MM-DD_dayname (e.g., 2026-01-26_monday).\n\nCall the cancel appointment sheet using the sheet_name and phone_number.\n\nOnce the tool runs, confirm to the user: \"Your appointment for [Date] has been successfully cancelled.\"\n\nTask: Reschedule Appointment\n\nInitial Step: Ask the user for the Old Date and their 10-digit Phone Number.\n\nExecution (Wipe): Calculate the sheet name (e.g., 2026-02-07_saturday) and call the cancel appointment sheet tool. This tool must match the row by Patient Phone and clear the Status, Name, and Phone fields.\n\nAvailability: Ask for the New Date. Use the read_rows_in_sheet tool to list all empty time slots.\n\nFinal Step: Once a time is chosen, call the update rows in sheet tool. Match the row by Time and set Status='booked', Patient Name, and Patient Phone.\n\nConstraints: > * Today is 2026-02-07\n\nMaximum window is 7 days.\n\nSheet names must be all lowercase (e.g., 2026-02-07_saturday).\n\nUse IST (Asia/Kolkata)."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        832,
+        -96
+      ],
+      "id": "f53190ba-2943-434c-af54-4453055651e2",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        512,
+        128
+      ],
+      "id": "c8074991-a8af-4c70-a895-b42b877a322f",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "bsRM8TGe492lYPT6",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('WhatsApp Trigger').item.json.contacts[0].wa_id }}",
+        "contextWindowLength": 20
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        640,
+        128
+      ],
+      "id": "c5678a78-d831-4e38-a19a-043220213b71",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1pEEa0fa1vZnkhMnfqQ-MbuZxbdtXtcwD-qWjmUyLqe0",
+          "mode": "list",
+          "cachedResultName": "Parul_Sevashram_Hospital_FAQs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pEEa0fa1vZnkhMnfqQ-MbuZxbdtXtcwD-qWjmUyLqe0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1833986412,
+          "mode": "list",
+          "cachedResultName": "Hospital FAQs",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1pEEa0fa1vZnkhMnfqQ-MbuZxbdtXtcwD-qWjmUyLqe0/edit#gid=1833986412"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        752,
+        128
+      ],
+      "id": "1bbef16c-de4b-49bd-ba90-8acdbefc4d7f",
+      "name": "queries",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mftYxtCLq146Ewcd",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ZbbANCr3duTsgYF05C19vQhWHfwJJ5cEWtejbUZX9Hs",
+          "mode": "list",
+          "cachedResultName": "Hospital_Appointments_Monday",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZbbANCr3duTsgYF05C19vQhWHfwJJ5cEWtejbUZX9Hs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sheet', ``, 'string') }}",
+          "mode": "name"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        1072,
+        128
+      ],
+      "id": "6e5fde5a-c500-4743-8a08-7636746f6c3e",
+      "name": "read rows in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mftYxtCLq146Ewcd",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZbbANCr3duTsgYF05C19vQhWHfwJJ5cEWtejbUZX9Hs",
+          "mode": "list",
+          "cachedResultName": "Hospital_Appointments_Monday",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZbbANCr3duTsgYF05C19vQhWHfwJJ5cEWtejbUZX9Hs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sheet', ``, 'string') }}",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "row_number": 0,
+            "Time": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Time', ``, 'string') }}",
+            "Patient Name": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Patient_Name', ``, 'string') }}",
+            "Patient Phone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Patient_Phone', ``, 'string') }}",
+            "Status": "booked"
+          },
+          "matchingColumns": [
+            "Time"
+          ],
+          "schema": [
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Patient Name",
+              "displayName": "Patient Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Patient Phone",
+              "displayName": "Patient Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        1312,
+        112
+      ],
+      "id": "655ffad2-ca2c-4525-99fe-6981032892f5",
+      "name": "update rows in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mftYxtCLq146Ewcd",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ZbbANCr3duTsgYF05C19vQhWHfwJJ5cEWtejbUZX9Hs",
+          "mode": "list",
+          "cachedResultName": "Hospital_Appointments_Monday",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZbbANCr3duTsgYF05C19vQhWHfwJJ5cEWtejbUZX9Hs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sheet', `\"Use this tool to look up a patient's appointment. You must provide the 'sheet_name' (YYYY-MM-DD_dayname) and the patient's 10-digit 'phone_number'. It will return the Time and Status if found.\"`, 'string') }}",
+          "mode": "name"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "=Patient Phone",
+              "lookupValue": "={{ $fromAI(\"phone_number\") }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        848,
+        272
+      ],
+      "id": "e4fbd758-448d-4f04-9cd8-e38085f674a8",
+      "name": "view appointment sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mftYxtCLq146Ewcd",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ZbbANCr3duTsgYF05C19vQhWHfwJJ5cEWtejbUZX9Hs",
+          "mode": "list",
+          "cachedResultName": "Hospital_Appointments_Monday",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ZbbANCr3duTsgYF05C19vQhWHfwJJ5cEWtejbUZX9Hs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Sheet', ``, 'string') }}"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Patient Phone": "={{ $fromAI(\"phone_number\") }}",
+            "row_number": 0,
+            "Status": "={{ \"\" }}",
+            "Patient Name": "={{ \"\" }}"
+          },
+          "matchingColumns": [
+            "Patient Phone"
+          ],
+          "schema": [
+            {
+              "id": "Time",
+              "displayName": "Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Patient Name",
+              "displayName": "Patient Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Patient Phone",
+              "displayName": "Patient Phone",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        976,
+        288
+      ],
+      "id": "3d159b34-9e6f-4762-bbfd-d83adc01242e",
+      "name": "cancel appoinment sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "mftYxtCLq146Ewcd",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "WhatsApp Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "queries": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "read rows in sheet": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "update rows in sheet": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "view appointment sheet": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "cancel appoinment sheet": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": false,
+    "timeSavedMode": "fixed",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "versionId": "097fe358-725a-4f7a-82ea-b841765481dd",
+  "meta": {
+    "instanceId": "a4f81d8bd0a27dbee4dc0b2a19298cd9382f99a5c2bbbfb23c25d67e8d3a4387"
+  },
+  "id": "8-8x8YK_8jfPJQZmxuWBj",
+  "tags": []
+}

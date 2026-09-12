@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parul Sevashram Hospital | NABH Accredited Multispeciality Hospital, Vadodara</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --emerald:   #006B54;
+  --emerald-l: #00916F;
+  --emerald-d: #004A3A;
+  --mint:      #E8F7F2;
+  --cream:     #FAFAF8;
+  --white:     #FFFFFF;
+  --ink:       #0C1A14;
+  --slate:     #4A6055;
+  --wa:        #25D366;
+  --gold:      #D4A94C;
+  --red:       #DC4A4A;
+  --sh:        0 2px 20px rgba(0,107,84,.08);
+  --sh-up:     0 16px 48px rgba(0,107,84,.18);
+}
+html { scroll-behavior: smooth; }
+body { font-family: 'Outfit', sans-serif; background: var(--cream); color: var(--ink); overflow-x: hidden; }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--mint); }
+::-webkit-scrollbar-thumb { background: var(--emerald); border-radius: 3px; }
+
+/* NAV */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5vw; height: 70px;
+  background: rgba(255,255,255,.95); backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0,107,84,.1); transition: box-shadow .3s;
+}
+nav.scrolled { box-shadow: 0 4px 30px rgba(0,107,84,.1); }
+.nav-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.nav-logo-mark { width: 40px; height: 40px; border-radius: 11px; background: linear-gradient(145deg, var(--emerald), var(--emerald-l)); display: grid; place-items: center; font-size: 1.25rem; box-shadow: 0 4px 12px rgba(0,107,84,.3); }
+.nav-logo-text { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--ink); line-height: 1.1; }
+.nav-logo-text span { display: block; font-size: .68rem; font-weight: 500; color: var(--slate); font-family: 'Outfit', sans-serif; letter-spacing: .05em; text-transform: uppercase; }
+.nav-links { display: flex; gap: 4px; list-style: none; }
+.nav-links a { padding: 7px 15px; border-radius: 8px; color: var(--slate); font-size: .87rem; font-weight: 500; text-decoration: none; transition: all .2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--emerald); background: var(--mint); }
+.nav-cta { background: var(--wa) !important; color: #fff !important; border-radius: 9px !important; display: flex !important; align-items: center; gap: 5px; font-size: .82rem !important; padding: 8px 14px !important; box-shadow: 0 3px 12px rgba(37,211,102,.3); }
+.nav-cta:hover { filter: brightness(1.05); transform: translateY(-1px); }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--ink); border-radius: 2px; transition: .3s; }
+.mobile-menu { display: none; position: fixed; top: 70px; left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--mint); padding: 1rem 5vw 1.5rem; z-index: 99; flex-direction: column; gap: 4px; }
+.mobile-menu a { padding: 11px 15px; border-radius: 10px; color: var(--slate); font-weight: 500; text-decoration: none; transition: .2s; }
+.mobile-menu a:hover { color: var(--emerald); background: var(--mint); }
+.mobile-menu.open { display: flex; }
+
+/* BUTTONS */
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 26px; border-radius: 11px; font-family: 'Outfit', sans-serif; font-size: .95rem; font-weight: 600; cursor: pointer; border: none; transition: all .22s; text-decoration: none; }
+.btn-primary { background: var(--emerald); color: #fff; }
+.btn-primary:hover { background: var(--emerald-l); transform: translateY(-2px); box-shadow: var(--sh-up); }
+.btn-wa { background: var(--wa); color: #fff; }
+.btn-wa:hover { filter: brightness(1.05); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,.35); }
+.btn-outline { background: transparent; color: var(--emerald); border: 1.5px solid var(--emerald); }
+.btn-outline:hover { background: var(--emerald); color: #fff; }
+.btn-ghost { background: rgba(255,255,255,.12); color: #fff; border: 1px solid rgba(255,255,255,.25); }
+.btn-ghost:hover { background: rgba(255,255,255,.22); }
+
+/* PAGES */
+.page { display: none; padding-top: 70px; min-height: 100vh; }
+.page.active { display: block; }
+.section { padding: 80px 5vw; }
+.section-sm { padding: 48px 5vw; }
+.container { max-width: 1180px; margin: 0 auto; }
+.section-tag { display: inline-flex; align-items: center; gap: 7px; background: var(--mint); color: var(--emerald); border-radius: 50px; padding: 5px 14px; font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 14px; }
+.section-title { font-family: 'Playfair Display', serif; font-size: clamp(1.9rem, 3.5vw, 2.7rem); line-height: 1.15; color: var(--ink); margin-bottom: 14px; }
+.section-sub { color: var(--slate); font-size: 1rem; line-height: 1.75; max-width: 540px; }
+
+/* HERO */
+.hero { min-height: calc(100vh - 70px); display: grid; place-items: center; background: linear-gradient(150deg, #E8F5EF 0%, #F4FBF8 45%, #EDF5FF 100%); position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(0,107,84,.07) 0%, transparent 70%); top: -100px; right: -100px; pointer-events: none; }
+.hero-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; position: relative; z-index: 1; }
+.hero-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(0,107,84,.08); border: 1px solid rgba(0,107,84,.2); border-radius: 50px; padding: 7px 16px; font-size: .82rem; font-weight: 600; color: var(--emerald); margin-bottom: 22px; animation: fadeUp .6s ease both; }
+.hero-badge .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--emerald); animation: pulse 1.8s infinite; }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.4;transform:scale(1.4)} }
+.hero-title { font-family: 'Playfair Display', serif; font-size: clamp(2.3rem, 4.2vw, 3.7rem); line-height: 1.1; color: var(--ink); margin-bottom: 18px; animation: fadeUp .6s .08s ease both; }
+.hero-title em { color: var(--emerald); font-style: normal; }
+.hero-desc { color: var(--slate); font-size: 1.05rem; line-height: 1.8; margin-bottom: 34px; animation: fadeUp .6s .16s ease both; }
+.hero-actions { display: flex; gap: 12px; flex-wrap: wrap; animation: fadeUp .6s .24s ease both; }
+.hero-stats { display: flex; gap: 0; margin-top: 48px; animation: fadeUp .6s .32s ease both; }
+.hero-stat { padding: 0 32px 0 0; margin-right: 32px; border-right: 1px solid rgba(0,107,84,.15); }
+.hero-stat:last-child { border-right: none; margin-right: 0; }
+.hero-stat strong { display: block; font-size: 1.9rem; font-weight: 700; color: var(--ink); font-family: 'Playfair Display', serif; }
+.hero-stat span { font-size: .76rem; color: var(--slate); font-weight: 500; text-transform: uppercase; letter-spacing: .05em; }
+
+/* HERO CARD */
+.hero-visual { position: relative; animation: fadeUp .7s .2s ease both; }
+.hero-card { background: #fff; border-radius: 20px; padding: 28px; box-shadow: 0 24px 60px rgba(0,107,84,.13); border: 1px solid rgba(0,107,84,.08); }
+.card-header { display: flex; gap: 14px; align-items: center; margin-bottom: 20px; }
+.card-avatar { width: 52px; height: 52px; border-radius: 14px; background: linear-gradient(145deg, var(--emerald), var(--emerald-l)); display: grid; place-items: center; font-size: 1.3rem; flex-shrink: 0; }
+.card-info h4 { font-size: 1rem; font-weight: 600; margin-bottom: 3px; }
+.card-info p { font-size: .8rem; color: var(--slate); }
+.card-label { font-size: .78rem; color: var(--slate); font-weight: 500; margin-bottom: 10px; }
+.slots-wrap { display: flex; gap: 7px; flex-wrap: wrap; margin-bottom: 18px; }
+.slot { padding: 7px 13px; border-radius: 8px; font-size: .78rem; font-weight: 600; cursor: pointer; transition: .2s; }
+.slot-open { background: var(--mint); color: var(--emerald); }
+.slot-open:hover { background: var(--emerald); color: #fff; }
+.slot-taken { background: #f0f0f0; color: #bbb; cursor: not-allowed; }
+.slot-sel { background: var(--emerald); color: #fff; }
+.book-btn { background: var(--wa); color: #fff; border: none; border-radius: 10px; padding: 13px; width: 100%; font-size: .93rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: .2s; }
+.book-btn:hover { filter: brightness(1.06); }
+.float-badge { position: absolute; background: #fff; border-radius: 12px; box-shadow: 0 8px 28px rgba(0,107,84,.14); padding: 12px 16px; display: flex; align-items: center; gap: 10px; font-size: .78rem; font-weight: 500; }
+.fb1 { top: -18px; right: -18px; }
+.fb2 { bottom: -18px; left: -18px; }
+.fb-ico { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-size: .9rem; }
+
+/* NABH BANNER */
+.nabh-banner { background: linear-gradient(90deg, var(--emerald-d), var(--emerald)); padding: 18px 5vw; display: flex; align-items: center; justify-content: center; gap: 32px; flex-wrap: wrap; }
+.nabh-item { display: flex; align-items: center; gap: 10px; color: rgba(255,255,255,.85); font-size: .83rem; font-weight: 500; }
+.nabh-item strong { color: #fff; }
+.nabh-div { width: 1px; height: 26px; background: rgba(255,255,255,.2); }
+
+/* ABOUT */
+.about-strip { background: #fff; padding: 80px 5vw; }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.about-img { background: linear-gradient(135deg, var(--mint), #c8e8de); border-radius: 20px; aspect-ratio: 4/3; display: grid; place-items: center; font-size: 5rem; position: relative; overflow: hidden; }
+.about-img::after { content: 'NABH ACCREDITED'; position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--emerald); color: #fff; border-radius: 50px; padding: 5px 14px; font-size: .68rem; font-weight: 700; letter-spacing: .07em; white-space: nowrap; }
+.about-feats { display: flex; flex-direction: column; gap: 12px; margin-top: 26px; }
+.about-feat { display: flex; gap: 12px; align-items: flex-start; }
+.feat-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--emerald); flex-shrink: 0; margin-top: 6px; }
+.feat-text { font-size: .9rem; color: var(--slate); line-height: 1.6; }
+.feat-text strong { color: var(--ink); }
+
+/* DEPARTMENTS */
+.dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 14px; margin-top: 44px; }
+.dept-card { background: #fff; border-radius: 16px; padding: 22px 18px; text-align: center; border: 1.5px solid rgba(0,107,84,.07); box-shadow: var(--sh); transition: all .25s; cursor: pointer; }
+.dept-card:hover { transform: translateY(-5px); border-color: var(--emerald); box-shadow: var(--sh-up); }
+.dept-icon { font-size: 1.9rem; margin-bottom: 10px; }
+.dept-card h4 { font-size: .9rem; font-weight: 600; margin-bottom: 3px; }
+.dept-card p { font-size: .74rem; color: var(--slate); }
+
+/* HOW IT WORKS */
+.hiw { background: var(--ink); border-radius: 24px; padding: 64px 5vw; }
+.hiw .section-title { color: #fff; }
+.hiw .section-sub { color: rgba(255,255,255,.55); }
+.hiw-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 20px; margin-top: 44px; }
+.hiw-step { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); border-radius: 16px; padding: 28px 22px; transition: .25s; }
+.hiw-step:hover { background: rgba(255,255,255,.09); border-color: rgba(0,145,111,.5); }
+.step-num { width: 34px; height: 34px; border-radius: 9px; background: var(--emerald); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: .88rem; margin-bottom: 14px; }
+.hiw-step h4 { color: #fff; font-size: .97rem; font-weight: 600; margin-bottom: 7px; }
+.hiw-step p { color: rgba(255,255,255,.5); font-size: .83rem; line-height: 1.65; }
+
+/* TESTIMONIALS */
+.testi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 18px; margin-top: 44px; }
+.testi-card { background: #fff; border-radius: 16px; padding: 24px; box-shadow: var(--sh); border: 1px solid rgba(0,107,84,.06); }
+.stars { color: var(--gold); font-size: .9rem; margin-bottom: 12px; letter-spacing: 2px; }
+.testi-card p { color: var(--slate); font-size: .88rem; line-height: 1.75; margin-bottom: 16px; font-style: italic; }
+.testi-author { display: flex; align-items: center; gap: 10px; }
+.testi-av { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--emerald), var(--gold)); display: grid; place-items: center; font-size: .9rem; color: #fff; font-weight: 700; }
+.testi-author div strong { font-size: .88rem; display: block; }
+.testi-author div span { font-size: .74rem; color: var(--slate); }
+
+/* CTA */
+.cta-strip { background: linear-gradient(135deg, var(--emerald-d), var(--emerald)); border-radius: 20px; padding: 52px 44px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 24px; }
+.cta-strip h3 { font-family: 'Playfair Display', serif; font-size: 1.9rem; color: #fff; margin-bottom: 8px; }
+.cta-strip p { color: rgba(255,255,255,.7); font-size: .93rem; }
+
+/* FOOTER */
+footer { background: var(--ink); color: rgba(255,255,255,.55); padding: 64px 5vw 32px; }
+.footer-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 44px; max-width: 1180px; margin: 0 auto; }
+.footer-brand-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+.f-logo-mark { width: 34px; height: 34px; border-radius: 9px; background: var(--emerald); display: grid; place-items: center; font-size: 1rem; flex-shrink: 0; }
+.footer-brand p { font-size: .84rem; line-height: 1.75; max-width: 260px; }
+.footer-brand address { font-style: normal; font-size: .8rem; line-height: 1.8; margin-top: 14px; color: rgba(255,255,255,.42); }
+.footer-col h5 { color: #fff; font-size: .83rem; font-weight: 600; margin-bottom: 16px; letter-spacing: .05em; text-transform: uppercase; }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-col ul li a { color: rgba(255,255,255,.48); font-size: .82rem; text-decoration: none; transition: .2s; }
+.footer-col ul li a:hover { color: var(--emerald-l); }
+.footer-bottom { border-top: 1px solid rgba(255,255,255,.07); margin-top: 48px; padding-top: 22px; max-width: 1180px; margin-left: auto; margin-right: auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: .77rem; }
+.footer-bottom a { color: var(--emerald-l); text-decoration: none; }
+
+/* PAGE 2 — DOCTORS */
+.search-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 30px; }
+.search-wrap { flex: 1; min-width: 200px; display: flex; align-items: center; background: #fff; border: 1.5px solid rgba(0,107,84,.12); border-radius: 11px; padding: 0 14px; transition: border-color .2s; }
+.search-wrap:focus-within { border-color: var(--emerald); }
+.search-wrap input { border: none; outline: none; flex: 1; padding: 13px 10px; font-family: 'Outfit', sans-serif; font-size: .93rem; background: transparent; }
+.filter-sel { padding: 13px 14px; border-radius: 11px; border: 1.5px solid rgba(0,107,84,.12); background: #fff; font-family: 'Outfit', sans-serif; font-size: .88rem; color: var(--ink); outline: none; cursor: pointer; transition: border-color .2s; }
+.filter-sel:focus { border-color: var(--emerald); }
+.docs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(275px, 1fr)); gap: 18px; }
+.doc-card { background: #fff; border-radius: 18px; overflow: hidden; box-shadow: var(--sh); border: 1px solid rgba(0,107,84,.05); transition: all .25s; }
+.doc-card:hover { transform: translateY(-4px); box-shadow: var(--sh-up); }
+.doc-top { background: linear-gradient(135deg, var(--mint), #d8ede6); padding: 26px 22px; text-align: center; }
+.doc-ava { width: 76px; height: 76px; border-radius: 18px; background: linear-gradient(145deg, var(--emerald), var(--emerald-l)); display: grid; place-items: center; font-size: 1.9rem; margin: 0 auto 12px; box-shadow: 0 8px 20px rgba(0,107,84,.25); }
+.doc-top h3 { font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
+.doc-dept-tag { font-size: .76rem; color: var(--emerald); font-weight: 600; background: rgba(0,107,84,.1); padding: 3px 10px; border-radius: 50px; display: inline-block; }
+.doc-body { padding: 18px 22px; }
+.doc-meta { display: flex; gap: 14px; margin-bottom: 12px; }
+.doc-m { font-size: .78rem; color: var(--slate); display: flex; align-items: center; gap: 4px; }
+.doc-m strong { color: var(--ink); }
+.doc-slots-lbl { font-size: .75rem; color: var(--slate); font-weight: 500; margin-bottom: 7px; }
+.slot-row-sm { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 14px; }
+.slot-sm { padding: 4px 9px; border-radius: 6px; font-size: .72rem; font-weight: 600; }
+.sm-open { background: var(--mint); color: var(--emerald); }
+.sm-taken { background: #f0f0f0; color: #bbb; }
+.doc-footer { border-top: 1px solid rgba(0,107,84,.07); padding: 12px 22px; display: flex; gap: 8px; }
+.doc-footer .btn { flex: 1; justify-content: center; font-size: .82rem; padding: 9px; }
+
+/* PAGE 3 — DASHBOARD */
+.dash-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 14px; margin-bottom: 32px; }
+.stat-card { background: #fff; border-radius: 14px; padding: 20px 18px; box-shadow: var(--sh); border: 1px solid rgba(0,107,84,.05); }
+.stat-card .s-ico { font-size: 1.5rem; margin-bottom: 8px; }
+.stat-card .s-num { font-size: 1.9rem; font-weight: 700; color: var(--ink); font-family: 'Playfair Display', serif; }
+.stat-card .s-lbl { font-size: .74rem; color: var(--slate); margin-top: 2px; text-transform: uppercase; letter-spacing: .04em; }
+.stat-card.hl { background: var(--emerald); }
+.stat-card.hl .s-num, .stat-card.hl .s-lbl { color: #fff; }
+.dash-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.f-pill { padding: 7px 16px; border-radius: 50px; font-size: .8rem; font-weight: 600; cursor: pointer; border: 1.5px solid rgba(0,107,84,.12); background: #fff; transition: .2s; color: var(--slate); }
+.f-pill:hover, .f-pill.active { background: var(--emerald); color: #fff; border-color: var(--emerald); }
+.table-wrap { background: #fff; border-radius: 14px; overflow: hidden; box-shadow: var(--sh); border: 1px solid rgba(0,107,84,.05); }
+table { width: 100%; border-collapse: collapse; }
+th { background: var(--mint); color: var(--ink); font-size: .74rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; padding: 13px 18px; text-align: left; }
+td { padding: 14px 18px; font-size: .86rem; border-bottom: 1px solid rgba(0,107,84,.05); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: rgba(0,107,84,.02); }
+.badge { padding: 3px 11px; border-radius: 50px; font-size: .72rem; font-weight: 700; }
+.badge-confirmed { background: rgba(0,107,84,.1); color: var(--emerald); }
+.badge-pending { background: rgba(212,169,76,.18); color: #8a6408; }
+.badge-cancelled { background: rgba(220,74,74,.1); color: var(--red); }
+.badge-completed { background: rgba(60,120,200,.1); color: #3878c8; }
+.tbl-actions { display: flex; gap: 5px; }
+.tbl-btn { width: 28px; height: 28px; border-radius: 7px; border: none; cursor: pointer; display: grid; place-items: center; font-size: .82rem; transition: .2s; }
+.tbl-edit { background: var(--mint); color: var(--emerald); }
+.tbl-edit:hover { background: var(--emerald); color: #fff; }
+.tbl-del { background: rgba(220,74,74,.1); color: var(--red); }
+.tbl-del:hover { background: var(--red); color: #fff; }
+
+/* PAGE 4 — WA BOOKING */
+.wa-hero { background: linear-gradient(135deg, #E9F7F2, #F4FDF9); padding: 80px 5vw 60px; text-align: center; }
+.wa-hero .section-title { margin: 0 auto 16px; max-width: 600px; }
+.wa-hero .section-sub { margin: 0 auto 28px; }
+.wa-phone { background: var(--mint); border: 1.5px solid rgba(0,107,84,.15); border-radius: 14px; padding: 10px 24px; display: inline-flex; align-items: center; gap: 10px; margin-bottom: 24px; font-size: 1.1rem; font-weight: 700; color: var(--emerald); }
+.wa-mockup { max-width: 360px; margin: 44px auto 0; background: #ECE5DD; border-radius: 24px; overflow: hidden; box-shadow: 0 28px 72px rgba(0,107,84,.2); }
+.wa-topbar { background: #075E54; color: #fff; padding: 14px 18px; display: flex; align-items: center; gap: 12px; }
+.wa-topbar .wa-av { width: 40px; height: 40px; border-radius: 50%; background: var(--wa); display: grid; place-items: center; font-size: 1rem; }
+.wa-topbar div strong { display: block; font-size: .93rem; }
+.wa-topbar div span { font-size: .7rem; opacity: .8; }
+.wa-chat { padding: 16px; display: flex; flex-direction: column; gap: 10px; max-height: 380px; overflow-y: auto; }
+.wa-msg { max-width: 80%; border-radius: 12px; padding: 10px 13px; font-size: .8rem; line-height: 1.5; }
+.wa-msg.bot { background: #fff; align-self: flex-start; border-radius: 0 12px 12px 12px; }
+.wa-msg.user { background: #DCF8C6; align-self: flex-end; border-radius: 12px 0 12px 12px; }
+.wa-msg small { display: block; font-size: .62rem; color: #999; margin-top: 4px; text-align: right; }
+.flow-steps { display: grid; grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); gap: 18px; }
+.flow-step { background: #fff; border-radius: 14px; padding: 22px; box-shadow: var(--sh); text-align: center; border: 1px solid rgba(0,107,84,.06); transition: .25s; }
+.flow-step:hover { border-color: var(--wa); transform: translateY(-3px); }
+.flow-ico { font-size: 1.9rem; margin-bottom: 10px; }
+.flow-step h4 { font-size: .93rem; font-weight: 700; margin-bottom: 5px; }
+.flow-step p { font-size: .79rem; color: var(--slate); line-height: 1.6; }
+
+/* PAGE 5 — CONTACT */
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
+.contact-card { background: #fff; border-radius: 18px; padding: 34px; box-shadow: var(--sh); border: 1px solid rgba(0,107,84,.06); }
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: .82rem; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px 15px; border: 1.5px solid rgba(0,107,84,.12); border-radius: 10px; font-family: 'Outfit', sans-serif; font-size: .9rem; background: #fff; outline: none; transition: border-color .2s; resize: vertical; }
+.form-group input:focus, .form-group textarea:focus, .form-group select:focus { border-color: var(--emerald); }
+.form-group textarea { min-height: 110px; }
+.info-cards { display: flex; flex-direction: column; gap: 13px; }
+.info-card { background: #fff; border-radius: 14px; padding: 18px 20px; box-shadow: var(--sh); border: 1px solid rgba(0,107,84,.05); display: flex; align-items: flex-start; gap: 13px; }
+.info-ico { width: 42px; height: 42px; border-radius: 11px; flex-shrink: 0; background: var(--mint); display: grid; place-items: center; font-size: 1rem; }
+.info-card h4 { font-size: .88rem; font-weight: 700; margin-bottom: 3px; }
+.info-card p, .info-card a { font-size: .79rem; color: var(--slate); line-height: 1.65; text-decoration: none; }
+.info-card a:hover { color: var(--emerald); }
+.map-box { margin-top: 14px; background: #fff; border-radius: 14px; box-shadow: var(--sh); overflow: hidden; border: 1px solid rgba(0,107,84,.05); }
+.map-inner { height: 180px; background: linear-gradient(135deg, var(--mint), #c8e8de); display: grid; place-items: center; text-align: center; }
+.map-inner p { color: var(--emerald); font-weight: 600; font-size: .93rem; }
+.map-inner span { font-size: .78rem; color: var(--slate); display: block; margin-top: 4px; }
+
+/* TOAST */
+.toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--ink); color: #fff; padding: 12px 24px; border-radius: 50px; font-size: .88rem; font-weight: 500; z-index: 9999; transition: .3s; opacity: 0; white-space: nowrap; border: 1px solid rgba(0,107,84,.3); }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* ANIMATIONS */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 48px; }
+  .about-grid { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 700px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .hero-stats { flex-wrap: wrap; gap: 16px; }
+  .hero-stat { border-right: none; padding: 0; margin: 0; }
+  .footer-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo" onclick="showPage('home')">
+    <div class="nav-logo-mark">🏥</div>
+    <div class="nav-logo-text">Parul Sevashram Hospital <span>NABH Accredited · Est. 2012</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active" onclick="showPage('home');setActive(this)">Home</a></li>
+    <li><a href="#" onclick="showPage('doctors');setActive(this)">Doctors</a></li>
+    <li><a href="#" onclick="showPage('dashboard');setActive(this)">Dashboard</a></li>
+    <li><a href="#" onclick="showPage('booking');setActive(this)">WhatsApp AI</a></li>
+    <li><a href="#" onclick="showPage('contact');setActive(this)">Contact</a></li>
+    <li><a href="https://wa.me/15551765317?text=Hi!+I+would+like+to+book+an+appointment." target="_blank" class="nav-cta">📱 Book Now</a></li>
+  </ul>
+  <div class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#" onclick="showPage('home');closeMobileMenu()">🏠 Home</a>
+  <a href="#" onclick="showPage('doctors');closeMobileMenu()">👨‍⚕️ Doctors</a>
+  <a href="#" onclick="showPage('dashboard');closeMobileMenu()">📋 Dashboard</a>
+  <a href="#" onclick="showPage('booking');closeMobileMenu()">💬 WhatsApp AI</a>
+  <a href="#" onclick="showPage('contact');closeMobileMenu()">📞 Contact</a>
+</div>
+
+<!-- PAGE 1 — HOME -->
+<div id="page-home" class="page active">
+
+  <!-- NABH STRIP -->
+  <div class="nabh-banner">
+    <div class="nabh-item">🏆 <strong>NABH &amp; NABL Accredited</strong></div>
+    <div class="nabh-div"></div>
+    <div class="nabh-item">🏅 <strong>Leading Hospital</strong> — West Zone Award</div>
+    <div class="nabh-div"></div>
+    <div class="nabh-item">🏥 <strong>1100+ Beds</strong> · <strong>45+ Specialties</strong></div>
+    <div class="nabh-div"></div>
+    <div class="nabh-item">📞 Toll-Free: <strong>1800-889-9774</strong></div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <div class="hero-badge"><span class="dot"></span> AI Appointment Booking · 24/7</div>
+        <h1 class="hero-title">Quality Healthcare<br>for <em>Every Life</em> —<br>Book in Seconds</h1>
+        <p class="hero-desc">Parul Sevashram Hospital brings world-class multispeciality care to Vadodara. Message our AI on WhatsApp to book appointments instantly — no waiting, no forms.</p>
+        <div class="hero-actions">
+          <a href="https://wa.me/15551765317?text=Hi!+I+would+like+to+book+an+appointment." target="_blank" class="btn btn-wa">📱 Book via WhatsApp</a>
+          <a href="#" class="btn btn-outline" onclick="showPage('doctors')">View Doctors</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><strong>1100+</strong><span>Beds</span></div>
+          <div class="hero-stat"><strong>45+</strong><span>Specialties</span></div>
+          <div class="hero-stat"><strong>837+</strong><span>Surgeries</span></div>
+          <div class="hero-stat"><strong>24/7</strong><span>AI Booking</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="float-badge fb1">
+          <div class="fb-ico" style="background:rgba(37,211,102,.12);color:var(--wa)">✓</div>
+          <div><strong>Appointment Confirmed</strong><br><span style="font-size:.68rem;color:var(--slate)">Dr. Sandip Mavani · 11:00 AM</span></div>
+        </div>
+        <div class="hero-card">
+          <div class="card-header">
+            <div class="card-avatar">👨‍⚕️</div>
+            <div class="card-info">
+              <h4>Dr. Kalpesh Jani</h4>
+              <p>General Surgery · 15 yrs exp</p>
+            </div>
+          </div>
+          <p class="card-label">📅 Available Today</p>
+          <div class="slots-wrap">
+            <div class="slot slot-open">9:00 AM</div>
+            <div class="slot slot-taken">10:00 AM</div>
+            <div class="slot slot-sel">11:00 AM</div>
+            <div class="slot slot-open">2:00 PM</div>
+            <div class="slot slot-taken">3:00 PM</div>
+            <div class="slot slot-open">5:00 PM</div>
+          </div>
+          <button class="book-btn" onclick="window.open('https://wa.me/15551765317?text=Hi!+I+would+like+to+book+an+appointment+with+Dr.+Kalpesh+Jani+at+11%3A00+AM+today.','_blank')">
+            📱 Confirm via WhatsApp
+          </button>
+        </div>
+        <div class="float-badge fb2">
+          <div class="fb-ico" style="background:rgba(0,107,84,.1);color:var(--emerald)">🤖</div>
+          <div><strong>AI replied in 2 seconds</strong><br><span style="font-size:.68rem;color:var(--slate)">Gemini-powered · Smart Booking</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT STRIP -->
+  <div class="about-strip">
+    <div class="container about-grid">
+      <div class="about-img">🏥</div>
+      <div>
+        <div class="section-tag">🏥 About Us</div>
+        <h2 class="section-title">Parul Sevashram Hospital</h2>
+        <p class="section-sub">Founded in 2012 under Parul Arogya Seva Mandal Trust, PSH is a NABH-accredited digital hospital in Vadodara committed to "Health for All." Spread across 4.2 lakh sq ft, we serve patients from across Gujarat, MP and Rajasthan.</p>
+        <div class="about-feats">
+          <div class="about-feat"><div class="feat-dot"></div><div class="feat-text"><strong>1100+ beds</strong> across multispeciality &amp; superspeciality departments</div></div>
+          <div class="about-feat"><div class="feat-dot"></div><div class="feat-text"><strong>NABH &amp; NABL accredited</strong> — awarded Leading Hospital, West Zone at Delhi National Healthcare Excellence Awards</div></div>
+          <div class="about-feat"><div class="feat-dot"></div><div class="feat-text"><strong>PMJAY-MAA empanelled</strong> — cashless treatment for eligible patients, coverage up to ₹5 lakh/year</div></div>
+          <div class="about-feat"><div class="feat-dot"></div><div class="feat-text"><strong>24-hour pharmacy, lab &amp; diagnostics</strong> — X-ray, sonography, echo, and more on-site</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPARTMENTS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-tag">🩺 Specialties</div>
+      <h2 class="section-title">Our Medical Departments</h2>
+      <p class="section-sub">45+ specialties with top board-certified physicians — all bookable instantly via WhatsApp AI.</p>
+      <div class="dept-grid">
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">❤️</div><h4>Cardiology</h4><p>Heart &amp; CVTS</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">🧠</div><h4>Neurology</h4><p>Brain &amp; Spine</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">🦴</div><h4>Orthopaedics</h4><p>Bones &amp; Joints</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">🍼</div><h4>Paediatrics</h4><p>Child Health</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">🤱</div><h4>Obs &amp; Gynae</h4><p>Women's Health</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">🎗️</div><h4>Oncology</h4><p>Cancer Care</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">👁️</div><h4>Ophthalmology</h4><p>Eye &amp; Laser</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">🦷</div><h4>Dental</h4><p>Oral Health</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">🫁</div><h4>Pulmonology</h4><p>Chest &amp; Lungs</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">🩺</div><h4>General Medicine</h4><p>Primary Care</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">🧪</div><h4>Gastroenterology</h4><p>Digestive Health</p></div>
+        <div class="dept-card" onclick="showPage('doctors')"><div class="dept-icon">🩻</div><h4>Nephrology</h4><p>Kidney Care</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section-sm" style="padding:0 5vw 80px">
+    <div class="container">
+      <div class="hiw">
+        <div class="section-tag" style="background:rgba(255,255,255,.1);color:rgba(255,255,255,.8)">⚡ Process</div>
+        <h2 class="section-title">How WhatsApp AI Booking Works</h2>
+        <p class="section-sub">From hello to confirmed — in under 60 seconds.</p>
+        <div class="hiw-grid">
+          <div class="hiw-step"><div class="step-num">1</div><h4>Send a Message</h4><p>WhatsApp <strong style="color:rgba(255,255,255,.8)">+1 (555) 176-5317</strong> anytime. No downloads needed.</p></div>
+          <div class="hiw-step"><div class="step-num">2</div><h4>AI Understands You</h4><p>Our Gemini-powered AI reads your request and finds the right specialist.</p></div>
+          <div class="hiw-step"><div class="step-num">3</div><h4>See Available Slots</h4><p>Real-time availability from Google Sheets. Pick your preferred time.</p></div>
+          <div class="hiw-step"><div class="step-num">4</div><h4>Confirmed Instantly</h4><p>Slot booked and saved. You get a confirmation message on WhatsApp.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" style="padding-top:0">
+    <div class="container">
+      <div class="section-tag">⭐ Reviews</div>
+      <h2 class="section-title">What Patients Say</h2>
+      <div class="testi-grid">
+        <div class="testi-card"><div class="stars">★★★★★</div><p>"Booked a cardiology appointment in under a minute on WhatsApp. The AI was polite, fast and accurate. PSH is truly world-class."</p><div class="testi-author"><div class="testi-av">R</div><div><strong>Rajan Mehta</strong><span>Cardiology Patient, Vadodara</span></div></div></div>
+        <div class="testi-card"><div class="stars">★★★★★</div><p>"The AI reminded me before my appointment and helped me reschedule easily. NABH quality visible in every department."</p><div class="testi-author"><div class="testi-av">S</div><div><strong>Sunita Patel</strong><span>Neurology Patient, Anand</span></div></div></div>
+        <div class="testi-card"><div class="stars">★★★★★</div><p>"As a senior citizen, I WhatsApp'ed like I do with family. Appointment booked, no confusion. Exceptional doctors."</p><div class="testi-author"><div class="testi-av">A</div><div><strong>Arvind Joshi</strong><span>General Medicine, Waghodia</span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section-sm" style="padding:0 5vw 80px">
+    <div class="container">
+      <div class="cta-strip">
+        <div>
+          <h3>Ready to book your appointment?</h3>
+          <p>Available 24/7 · Instant confirmation · Zero paperwork · PMJAY accepted</p>
+        </div>
+        <a href="https://wa.me/15551765317?text=Hi!+I+would+like+to+book+an+appointment." target="_blank" class="btn btn-ghost" style="font-size:1rem">📱 Open WhatsApp AI →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-brand-name"><div class="f-logo-mark">🏥</div>Parul Sevashram Hospital</div>
+        <p>NABH Accredited multispeciality hospital in Vadodara, committed to "Health for All" since 2012.</p>
+        <address>P.O. Limda, Parul University, Waghodia<br>Vadodara, Gujarat — 391760<br><br>📞 1800-889-9774 (Toll Free)<br>📞 +91 90166 68136<br>✉ psh@paruluniversity.ac.in</address>
+      </div>
+      <div class="footer-col"><h5>Hospital</h5><ul><li><a href="#">About PSH</a></li><li><a href="#">Our Doctors</a></li><li><a href="#">Accreditations</a></li><li><a href="#">Careers</a></li><li><a href="#">News &amp; Events</a></li></ul></div>
+      <div class="footer-col"><h5>Services</h5><ul><li><a href="#">Cardiology</a></li><li><a href="#">Neurology</a></li><li><a href="#">Oncology</a></li><li><a href="#">Orthopaedics</a></li><li><a href="#">PMJAY / MAA Card</a></li></ul></div>
+      <div class="footer-col"><h5>Connect</h5><ul><li><a href="https://wa.me/15551765317" target="_blank">📱 WhatsApp AI</a></li><li><a href="#">📞 Contact Us</a></li><li><a href="#">🚨 Emergency: 108</a></li><li><a href="https://parulsevashramhospital.com" target="_blank">🌐 Official Website</a></li><li><a href="#">Privacy Policy</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 Parul Sevashram Hospital · Parul Arogya Seva Mandal Trust</span>
+      <span>Built for better healthcare access · <a href="#">Privacy</a> · <a href="#">Terms</a></span>
+    </div>
+  </footer>
+</div>
+
+<!-- PAGE 2 — DOCTORS -->
+<div id="page-doctors" class="page">
+  <section class="section">
+    <div class="container">
+      <div class="section-tag">👨‍⚕️ Our Team</div>
+      <h2 class="section-title">Find Your Doctor</h2>
+      <p class="section-sub">Browse specialists and book instantly via WhatsApp AI.</p>
+      <div class="search-row" style="margin-top:28px">
+        <div class="search-wrap">🔍 <input type="text" id="doctorSearch" placeholder="Search by name or specialty…" oninput="filterDoctors()"></div>
+        <select class="filter-sel" id="deptFilter" onchange="filterDoctors()">
+          <option value="">All Departments</option>
+          <option>General Surgery</option><option>Cardiology</option><option>Neurology</option><option>Orthopaedics</option>
+          <option>Gynaecology</option><option>General Medicine</option><option>Ophthalmology</option>
+          <option>Oncology</option><option>Paediatrics</option>
+        </select>
+        <select class="filter-sel" id="availFilter" onchange="filterDoctors()">
+          <option value="">Any Availability</option>
+          <option value="today">Available Today</option>
+        </select>
+      </div>
+      <div class="docs-grid" id="doctorsGrid"></div>
+    </div>
+  </section>
+</div>
+
+<!-- PAGE 3 — DASHBOARD -->
+<div id="page-dashboard" class="page">
+  <section class="section">
+    <div class="container">
+      <div class="section-tag">📋 Dashboard</div>
+      <h2 class="section-title">Appointment Dashboard</h2>
+      <p class="section-sub">Manage and track all appointments from one place.</p>
+      <div class="dash-stats" style="margin-top:32px">
+        <div class="stat-card hl"><div class="s-ico">📅</div><div class="s-num">24</div><div class="s-lbl">Total</div></div>
+        <div class="stat-card"><div class="s-ico">✅</div><div class="s-num">16</div><div class="s-lbl">Confirmed</div></div>
+        <div class="stat-card"><div class="s-ico">⏳</div><div class="s-num">5</div><div class="s-lbl">Pending</div></div>
+        <div class="stat-card"><div class="s-ico">❌</div><div class="s-num">3</div><div class="s-lbl">Cancelled</div></div>
+        <div class="stat-card"><div class="s-ico">🎯</div><div class="s-num">94%</div><div class="s-lbl">Completion</div></div>
+      </div>
+      <div class="dash-filters">
+        <div class="f-pill active" onclick="filterTable('all',this)">All (24)</div>
+        <div class="f-pill" onclick="filterTable('Confirmed',this)">✅ Confirmed</div>
+        <div class="f-pill" onclick="filterTable('Pending',this)">⏳ Pending</div>
+        <div class="f-pill" onclick="filterTable('Cancelled',this)">❌ Cancelled</div>
+        <div class="f-pill" onclick="filterTable('Completed',this)">🎯 Completed</div>
+      </div>
+      <div class="table-wrap" style="overflow-x:auto">
+        <table><thead><tr><th>ID</th><th>Patient</th><th>Doctor</th><th>Department</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="tableBody"></tbody></table>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PAGE 4 — WA BOOKING -->
+<div id="page-booking" class="page">
+  <section class="wa-hero">
+    <div class="section-tag" style="margin:0 auto 14px">💬 WhatsApp AI</div>
+    <h2 class="section-title">Book in 60 Seconds on WhatsApp</h2>
+    <p class="section-sub">Our Gemini AI handles bookings, FAQs, cancellations &amp; rescheduling — no app downloads, no hold music.</p>
+    <div class="wa-phone">📱 +1 (555) 176-5317</div>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:8px">
+      <a href="https://wa.me/15551765317?text=Hi!+I+would+like+to+book+an+appointment." target="_blank" class="btn btn-wa" style="font-size:1.05rem">📱 Open WhatsApp Now</a>
+      <a href="#" class="btn btn-outline">See How It Works ↓</a>
+    </div>
+    <div class="wa-mockup">
+      <div class="wa-topbar"><div class="wa-av">🤖</div><div><strong>Parul Sevashram AI</strong><span>🟢 Online · 24/7 Assistant</span></div></div>
+      <div class="wa-chat">
+        <div class="wa-msg bot">👋 Hi! I'm the Parul Sevashram Hospital AI. Would you like to book an appointment or ask a question?<small>9:01 AM ✓✓</small></div>
+        <div class="wa-msg user">Book an appointment for tomorrow<small>9:01 AM ✓✓</small></div>
+        <div class="wa-msg bot">Sure! For which date? And do you have a preferred doctor or department?<small>9:02 AM ✓✓</small></div>
+        <div class="wa-msg user">Cardiology, 1 April<small>9:02 AM ✓✓</small></div>
+        <div class="wa-msg bot">Here are available slots for <strong>2026-04-01 (Wednesday)</strong>:<br><br>🕘 9:00 AM<br>🕚 11:00 AM<br>🕑 2:00 PM<br><br>Which time works for you?<small>9:02 AM ✓✓</small></div>
+        <div class="wa-msg user">11 AM<small>9:03 AM ✓✓</small></div>
+        <div class="wa-msg bot">✅ <strong>Confirmed!</strong><br>🏥 Parul Sevashram Hospital<br>📅 1 April · 11:00 AM<br>📍 P.O. Limda, Waghodia, Vadodara<small>9:03 AM ✓✓</small></div>
+      </div>
+    </div>
+  </section>
+  <section class="section" style="padding-top:48px">
+    <div class="container">
+      <div class="section-tag">⚙️ How It Works</div>
+      <h2 class="section-title">4 Simple Steps</h2>
+      <div class="flow-steps" style="margin-top:32px">
+        <div class="flow-step"><div class="flow-ico">💬</div><h4>1. Send a Message</h4><p>WhatsApp +1 (555) 176-5317 on your existing WhatsApp. No registration.</p></div>
+        <div class="flow-step"><div class="flow-ico">🤖</div><h4>2. AI Understands</h4><p>Gemini AI reads your request and matches you with the right specialist and date.</p></div>
+        <div class="flow-step"><div class="flow-ico">📅</div><h4>3. Choose a Slot</h4><p>AI shows real-time available slots from Google Sheets. Pick your time.</p></div>
+        <div class="flow-step"><div class="flow-ico">✅</div><h4>4. Get Confirmed</h4><p>Instant confirmation with details saved in the appointment sheet.</p></div>
+      </div>
+      <div style="text-align:center;margin-top:52px;padding:44px;background:linear-gradient(135deg,var(--mint),#daf0e8);border-radius:20px">
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.8rem;margin-bottom:10px">Ask anything too!</h3>
+        <p style="color:var(--slate);margin-bottom:24px;max-width:480px;margin-left:auto;margin-right:auto">The AI knows hospital hours, location, specialties, pharmacy, insurance &amp; more. Just ask in plain language.</p>
+        <a href="https://wa.me/15551765317?text=Hi!+I+have+a+question+about+the+hospital." target="_blank" class="btn btn-wa" style="font-size:1.05rem">📱 Chat Now — Free</a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- PAGE 5 — CONTACT -->
+<div id="page-contact" class="page">
+  <section class="section">
+    <div class="container">
+      <div class="section-tag">📞 Get in Touch</div>
+      <h2 class="section-title">Contact Us</h2>
+      <p class="section-sub">Have questions? Our team is happy to help — or book instantly via WhatsApp AI.</p>
+      <div class="contact-grid" style="margin-top:44px">
+        <div class="contact-card">
+          <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:22px">Send a Message</h3>
+          <div class="form-group"><label>Full Name</label><input type="text" placeholder="e.g. Rajan Mehta"></div>
+          <div class="form-group"><label>Phone Number</label><input type="tel" placeholder="+91 XXXXX XXXXX"></div>
+          <div class="form-group"><label>Department</label><select><option>Select a department</option><option>Cardiology</option><option>Neurology</option><option>Orthopaedics</option><option>Oncology</option><option>Paediatrics</option><option>General Medicine</option><option>Other</option></select></div>
+          <div class="form-group"><label>Your Message</label><textarea placeholder="How can we help you?"></textarea></div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="toast('Message sent! We\'ll reply within 30 minutes. 📩')">Send Message →</button>
+          <div style="margin-top:18px;text-align:center;color:var(--slate);font-size:.83rem">Or instantly via</div>
+          <a href="https://wa.me/15551765317?text=Hi!+I+have+a+question+about+the+hospital." target="_blank" class="btn btn-wa" style="width:100%;justify-content:center;margin-top:10px">📱 WhatsApp Us Now</a>
+        </div>
+        <div>
+          <div class="info-cards">
+            <div class="info-card"><div class="info-ico">📍</div><div><h4>Hospital Address</h4><p>Parul Sevashram Hospital, P.O. Limda<br>Parul University, Waghodia<br>Vadodara, Gujarat — 391760</p></div></div>
+            <div class="info-card"><div class="info-ico">📞</div><div><h4>Phone &amp; WhatsApp AI</h4><p>Toll-Free: 1800-889-9774<br>Direct: +91 90166 68136<br>WhatsApp AI: +1 (555) 176-5317</p></div></div>
+            <div class="info-card"><div class="info-ico">🕐</div><div><h4>OPD Hours</h4><p>Mon–Sat: 8:00 AM – 8:00 PM<br>Sunday: Emergency patients only<br>WhatsApp AI &amp; Emergency: 24/7</p></div></div>
+            <div class="info-card"><div class="info-ico">✉️</div><div><h4>Email &amp; Website</h4><p><a href="mailto:psh@paruluniversity.ac.in">psh@paruluniversity.ac.in</a><br><a href="https://parulsevashramhospital.com" target="_blank">parulsevashramhospital.com</a></p></div></div>
+          </div>
+          <div class="map-box">
+            <div class="map-inner"><p>📍 Parul Sevashram Hospital</p><span>P.O. Limda, Waghodia, Vadodara 391760</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ <span id="toastMsg"></span></div>
+
+<script>
+const DOCTORS = [
+  { name: 'Dr. Kalpesh Jani',    dept: 'General Surgery',  exp: '15 yrs', rating: '4.9', fee: '₹600', icon: '👨‍⚕️', slots: ['9:00 AM','11:00 AM','2:00 PM'], taken: ['10:00 AM'] },
+  { name: 'Dr. Parth Solanki',   dept: 'Cardiology',       exp: '12 yrs', rating: '4.8', fee: '₹800', icon: '👨‍⚕️', slots: ['10:00 AM','3:00 PM'],           taken: ['9:00 AM','11:00 AM'] },
+  { name: 'Dr. Sandip Mavani',   dept: 'Neurology',        exp: '18 yrs', rating: '5.0', fee: '₹700', icon: '👨‍⚕️', slots: ['9:00 AM','11:00 AM','4:00 PM'], taken: ['2:00 PM'] },
+  { name: 'Dr. Ashish Desai',    dept: 'Orthopaedics',     exp: '10 yrs', rating: '4.7', fee: '₹650', icon: '👨‍⚕️', slots: ['10:00 AM','12:00 PM'],          taken: ['9:00 AM'] },
+  { name: 'Dr. Vasanthraja TG',  dept: 'Oncology',         exp: '14 yrs', rating: '4.9', fee: '₹900', icon: '👨‍⚕️', slots: ['9:30 AM','11:30 AM','3:30 PM'], taken: [] },
+  { name: 'Dr. Anant Agrawal',   dept: 'General Medicine', exp: '9 yrs',  rating: '4.6', fee: '₹350', icon: '👨‍⚕️', slots: ['8:00 AM','10:00 AM','4:00 PM'], taken: ['2:00 PM'] },
+  { name: 'Dr. Chirag Parikh',   dept: 'Ophthalmology',    exp: '8 yrs',  rating: '4.8', fee: '₹450', icon: '👨‍⚕️', slots: ['10:00 AM','1:00 PM'],          taken: ['11:00 AM'] },
+  { name: 'Dr. Mohit Shah',      dept: 'Paediatrics',      exp: '11 yrs', rating: '4.9', fee: '₹500', icon: '👨‍⚕️', slots: ['9:00 AM','3:00 PM'],           taken: ['11:00 AM'] },
+];
+
+const APPOINTMENTS = [
+  { id: 'APT-001', patient: 'Rajan Mehta',   doctor: 'Dr. Parth Solanki',  dept: 'Cardiology',      date: '31 Mar 2026', time: '11:00 AM', status: 'Confirmed' },
+  { id: 'APT-002', patient: 'Sunita Patel',  doctor: 'Dr. Sandip Mavani',  dept: 'Neurology',       date: '31 Mar 2026', time: '10:00 AM', status: 'Pending' },
+  { id: 'APT-003', patient: 'Arvind Joshi',  doctor: 'Dr. Anant Agrawal',  dept: 'General Medicine',date: '30 Mar 2026', time: '9:00 AM',  status: 'Completed' },
+  { id: 'APT-004', patient: 'Pooja Verma',   doctor: 'Dr. Vasanthraja TG', dept: 'Oncology',        date: '01 Apr 2026', time: '11:00 AM', status: 'Confirmed' },
+  { id: 'APT-005', patient: 'Nikhil Shah',   doctor: 'Dr. Ashish Desai',   dept: 'Orthopaedics',    date: '02 Apr 2026', time: '10:00 AM', status: 'Pending' },
+  { id: 'APT-006', patient: 'Kavya Reddy',   doctor: 'Dr. Parth Solanki',  dept: 'Cardiology',      date: '28 Mar 2026', time: '9:00 AM',  status: 'Cancelled' },
+  { id: 'APT-007', patient: 'Anil Kumar',    doctor: 'Dr. Chirag Parikh',  dept: 'Ophthalmology',   date: '29 Mar 2026', time: '1:00 PM',  status: 'Completed' },
+  { id: 'APT-008', patient: 'Divya Singh',   doctor: 'Dr. Mohit Shah',     dept: 'Paediatrics',     date: '03 Apr 2026', time: '3:30 PM',  status: 'Confirmed' },
+  { id: 'APT-009', patient: 'Manoj Tiwari',  doctor: 'Dr. Kalpesh Jani',   dept: 'General Surgery', date: '04 Apr 2026', time: '9:00 AM',  status: 'Confirmed' },
+  { id: 'APT-010', patient: 'Preethi Bhat',  doctor: 'Dr. Anant Agrawal',  dept: 'General Medicine',date: '27 Mar 2026', time: '8:00 AM',  status: 'Cancelled' },
+];
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+function setActive(el) {
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  el.classList.add('active');
+}
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+function closeMobileMenu() { document.getElementById('mobileMenu').classList.remove('open'); }
+window.addEventListener('scroll', () => document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10));
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+function renderDoctors(list) {
+  document.getElementById('doctorsGrid').innerHTML = list.map(d => `
+    <div class="doc-card">
+      <div class="doc-top">
+        <div class="doc-ava">${d.icon}</div>
+        <h3>${d.name}</h3>
+        <span class="doc-dept-tag">${d.dept}</span>
+      </div>
+      <div class="doc-body">
+        <div class="doc-meta">
+          <div class="doc-m">🎓 <strong>${d.exp}</strong></div>
+          <div class="doc-m">⭐ <strong>${d.rating}</strong></div>
+          <div class="doc-m">💊 <strong>${d.fee}</strong></div>
+        </div>
+        <p class="doc-slots-lbl">📅 Today's Slots</p>
+        <div class="slot-row-sm">
+          ${d.slots.map(s => `<span class="slot-sm sm-open">${s}</span>`).join('')}
+          ${d.taken.map(s => `<span class="slot-sm sm-taken">${s}</span>`).join('')}
+        </div>
+      </div>
+      <div class="doc-footer">
+        <a href="#" class="btn btn-outline" onclick="toast('Viewing profile for ${d.name}')">Profile</a>
+        <a href="https://wa.me/15551765317?text=${encodeURIComponent('Hi! I would like to book an appointment with ' + d.name + ' (' + d.dept + ').')}" target="_blank" class="btn btn-wa">📱 Book</a>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterDoctors() {
+  const search = document.getElementById('doctorSearch').value.toLowerCase();
+  const dept   = document.getElementById('deptFilter').value;
+  renderDoctors(DOCTORS.filter(d => {
+    const ms = d.name.toLowerCase().includes(search) || d.dept.toLowerCase().includes(search);
+    return ms && (!dept || d.dept === dept);
+  }));
+}
+
+function renderTable(filter) {
+  const data = filter === 'all' ? APPOINTMENTS : APPOINTMENTS.filter(a => a.status === filter);
+  const bc = { Confirmed:'badge-confirmed', Pending:'badge-pending', Cancelled:'badge-cancelled', Completed:'badge-completed' };
+  document.getElementById('tableBody').innerHTML = data.map(a => `
+    <tr>
+      <td><code style="font-size:.74rem;background:var(--mint);padding:2px 8px;border-radius:5px;color:var(--emerald)">${a.id}</code></td>
+      <td><strong>${a.patient}</strong></td>
+      <td>${a.doctor}</td>
+      <td>${a.dept}</td>
+      <td>${a.date}</td>
+      <td>${a.time}</td>
+      <td><span class="badge ${bc[a.status]}">${a.status}</span></td>
+      <td>
+        <div class="tbl-actions">
+          <button class="tbl-btn tbl-edit" onclick="toast('Editing ${a.id}…')">✏️</button>
+          <button class="tbl-btn tbl-del" onclick="toast('${a.id} cancelled.')">🗑</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function filterTable(filter, el) {
+  document.querySelectorAll('.f-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  renderTable(filter);
+}
+
+renderDoctors(DOCTORS);
+renderTable('all');
+</script>
+</body>
+</html>
